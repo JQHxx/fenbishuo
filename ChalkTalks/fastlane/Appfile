@@ -1,0 +1,8 @@
+app_identifier("com.fenbishuo.edu") # The bundle identifier of your app
+apple_id("zhuo13viva@gmail.com") # Your Apple email address
+
+itc_team_id("120342708") # App Store Connect Team ID
+team_id("A3T5H376XA") # Developer Portal Team ID
+
+# For more information about the Appfile, see:
+#     https://docs.fastlane.tools/advanced/#appfile

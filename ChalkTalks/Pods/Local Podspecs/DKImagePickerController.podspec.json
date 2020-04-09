@@ -1,0 +1,158 @@
+{
+  "name": "DKImagePickerController",
+  "version": "5.1.0",
+  "summary": "DKImagePickerController is a highly customizable, pure-Swift library.",
+  "homepage": "https://github.com/vvlee/DKImagePickerController",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Bannings": "zhangao0086@gmail.com"
+  },
+  "platforms": {
+    "ios": "10.0"
+  },
+  "source": {
+    "git": "https://github.com/vvlee/DKImagePickerController.git",
+    "tag": "5.1.0"
+  },
+  "requires_arc": true,
+  "swift_versions": [
+    "4.2",
+    "5"
+  ],
+  "subspecs": [
+    {
+      "name": "Core",
+      "dependencies": {
+        "SnapKit": [
+
+        ],
+        "RxSwift": [
+
+        ],
+        "RxCocoa": [
+
+        ],
+        "lottie-ios": [
+
+        ],
+        "MBProgressHUD": [
+
+        ],
+        "PLShortVideoKit": [
+          "3.1.0"
+        ],
+        "Qiniu": [
+
+        ],
+        "DKImagePickerController/ImageDataManager": [
+
+        ],
+        "DKImagePickerController/Resource": [
+
+        ]
+      },
+      "frameworks": [
+        "Foundation",
+        "UIKit",
+        "Photos"
+      ],
+      "source_files": [
+        "Sources/DKImagePickerController/*.{h,swift}",
+        "Sources/DKImagePickerController/View/**/*.swift"
+      ]
+    },
+    {
+      "name": "ImageDataManager",
+      "source_files": "Sources/DKImageDataManager/**/*.swift"
+    },
+    {
+      "name": "Resource",
+      "resource_bundles": {
+        "DKImagePickerController": "Sources/DKImagePickerController/Resource/Resources/*"
+      },
+      "source_files": "Sources/DKImagePickerController/Resource/DKImagePickerControllerResource.swift"
+    },
+    {
+      "name": "PhotoGallery",
+      "dependencies": {
+        "DKImagePickerController/Core": [
+
+        ],
+        "DKPhotoGallery": [
+
+        ]
+      },
+      "source_files": "Sources/Extensions/DKImageExtensionGallery.swift"
+    },
+    {
+      "name": "Camera",
+      "dependencies": {
+        "DKImagePickerController/Core": [
+
+        ],
+        "DKCamera": [
+
+        ]
+      },
+      "source_files": "Sources/Extensions/DKImageExtensionCamera.swift"
+    },
+    {
+      "name": "VideoCapture",
+      "dependencies": {
+        "DKImagePickerController/Core": [
+
+        ]
+      },
+      "source_files": "Sources/VideoCapture/*.swift"
+    },
+    {
+      "name": "Video",
+      "dependencies": {
+        "DKImagePickerController/Core": [
+
+        ],
+        "DKImagePickerController/VideoCapture": [
+
+        ]
+      },
+      "source_files": "Sources/Extensions/DKImageExtensionVideo.swift"
+    },
+    {
+      "name": "PhotoWithAudio",
+      "dependencies": {
+        "DKImagePickerController/Core": [
+
+        ]
+      },
+      "source_files": "Sources/PhotoWithAudio/*.swift"
+    },
+    {
+      "name": "InlineCamera",
+      "dependencies": {
+        "DKImagePickerController/Core": [
+
+        ],
+        "DKCamera": [
+
+        ]
+      },
+      "source_files": "Sources/Extensions/DKImageExtensionInlineCamera.swift"
+    },
+    {
+      "name": "PhotoEditor",
+      "dependencies": {
+        "DKImagePickerController/Core": [
+
+        ],
+        "CropViewController": [
+          "~> 2.5"
+        ]
+      },
+      "source_files": "Sources/Extensions/DKImageExtensionPhotoCropper.swift"
+    }
+  ],
+  "swift_version": "5"
+}

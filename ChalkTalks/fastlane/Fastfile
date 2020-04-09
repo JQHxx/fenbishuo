@@ -1,0 +1,249 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+$app = 'ChalkTalks'
+$target = 'ChalkTalks'
+$project_path = './ChalkTalks.xcodeproj'
+$dingtalk = 'https://oapi.dingtalk.com/robot/send?access_token=54b1dc8c42fe06765c1059b9bed64e2a55c88f7c3df5b57af0590b303a0fd7b8'
+
+def build(version_number, build_number, app_store)
+
+  # git
+  # sh 'git checkout origin:develop'
+  git_pull
+
+  # pod install
+  cocoapods(repo_update: false)
+
+  # 清理编译环境
+  clean_build_artifacts
+  clear_derived_data
+
+  # 修改Version (未指定不修改)
+  if version_number != nil
+    increment_version_number_in_plist(
+      version_number: version_number,
+      target: $target,
+      xcodeproj: $project_path
+    )
+  end
+
+  # 修改Build (未指定自增)
+  if build_number != nil
+    increment_build_number_in_plist(
+      build_number: build_number,
+      target: $target,
+      xcodeproj: $project_path
+    )
+  else
+    increment_build_number_in_plist(
+      target: $target,
+      xcodeproj: $project_path
+    )
+  end
+  
+  build_app(
+    scheme: $app,
+    workspace: 'ChalkTalks.xcworkspace',
+    include_bitcode: false,
+    include_symbols: true,
+    export_method: app_store ? 'app-store' : 'ad-hoc',
+    xcargs: app_store ? 'SWIFT_ACTIVE_COMPILATION_CONDITIONS="APPSTORE"' : 'SWIFT_ACTIVE_COMPILATION_CONDITIONS="ADHOC"',
+    clean: true,
+    export_xcargs: '-allowProvisioningUpdates'
+  )
+
+end
+
+def send_new_version(title, text)
+  content = %Q(
+    curl #{$dingtalk} \
+    -H 'Content-Type: application/json' \
+    -d '
+    {
+      "msgtype": "link",
+      "link": {
+        "title": "#{title}",
+        "text": "#{text}",
+        "messageUrl": "https://www.pgyer.com/fenbishuo"
+      },
+      "at": {
+        "isAtAll": true
+      }
+    }'
+  )
+  sh(content)
+end
+
+platform :ios do
+
+  before_all do
+  end
+
+  desc 'Push a new beta build to TestFlight'
+  lane :beta do |options|
+    match(
+      readonly: true,
+      type: 'adhoc',
+      git_url: 'https://ios:_8wM5s95j6x_kx7zBnb_@gitlab.fenbishuo.com/lizhuojie/certificates.git'
+    )
+
+    build(
+      options[:version], 
+      options[:build],
+      false,
+    )
+
+    # upload_to_testflight(
+    #   skip_submission: true,
+    #   skip_waiting_for_build_processing: true
+    # )
+
+    pgyer(
+      api_key: 'd9c51e3ee89951602d8d7b78fe3fc8ec',
+      user_key: '690917285febd5775590b199848be405'
+    )
+
+    version = get_version_number(
+      xcodeproj: $project_path,
+      target: $target,
+    )
+    build_number = get_build_number_from_plist(
+      xcodeproj: $project_path,
+      target: $target,
+    )
+    send_new_version("iOS最新测试包发布", "版本(#{version})\nbuild(#{build_number})")
+
+    git_commit(
+      path: ".",
+      message: "deploy: #{version} build #{build_number}"
+    )
+
+    begin
+      git_pull()
+      push_to_git_remote(
+        remote: "origin",
+        force: false,
+        tags: true
+      )
+    rescue => exception
+      puts exception.message
+    ensure
+      # always do this
+      upload_symbols_to_crashlytics(
+        gsp_path: './ChalkTalks/GoogleService-Info.plist',
+      )
+    end
+  
+  end
+
+  desc 'Push a new version build to Release'
+  lane :release do |options|
+
+    match(
+      readonly: true,
+      type: 'appstore',
+      git_url: 'https://ios:_8wM5s95j6x_kx7zBnb_@gitlab.fenbishuo.com/lizhuojie/certificates.git'
+    )
+
+    build(
+      options[:version], 
+      options[:build],
+      true,
+    )
+
+    upload_symbols_to_crashlytics(
+      gsp_path: './ChalkTalks/GoogleService-Info.plist',
+    )
+
+    # version = get_version_number(
+    #   xcodeproj: $project_path,
+    #   target: $target,
+    # )
+    # build_number = get_build_number_from_plist(
+    #   xcodeproj: $project_path,
+    #   target: $target,
+    # )
+
+    # git_commit(
+    #   path: ".",
+    #   message: "deploy: #{version} build #{build_number}"
+    # )
+
+    # begin
+    #   git_pull()
+    #   push_to_git_remote(
+    #     remote: "origin",
+    #     force: false,
+    #     tags: true
+    #   )
+    # rescue => exception
+    #   puts exception.message
+    # ensure
+    #   # always do this
+    # end
+  end
+
+  desc 'Push a new version build to Ad-hoc'
+  lane :adhoc do
+
+    match(
+      readonly: true,
+      type: 'adhoc',
+      git_url: 'https://ios:EDb7hzZxKT1iw1YJ6FcF@gitlab.fenbishuo.com/lizhuojie/certificates.git'
+    )
+
+    build(
+      options[:version], 
+      options[:build],
+      false,
+    )
+
+    pgyer(
+      api_key: 'd9c51e3ee89951602d8d7b78fe3fc8ec',
+      user_key: '690917285febd5775590b199848be405'
+    )
+
+    upload_symbols_to_crashlytics(
+      gsp_path: './ChalkTalks/GoogleService-Info.plist',
+    )
+  end
+
+  desc 'upload dSYM to firebase crashlytics'
+  lane :firebase do |options|
+    upload_symbols_to_crashlytics(
+      gsp_path: './ChalkTalks/GoogleService-Info.plist',
+    )
+  end
+
+  desc 'test dingding talk message'
+  lane :ding do |options|
+    version = get_version_number(
+      xcodeproj: $project_path,
+      target: $target,
+    )
+    build_number = get_build_number_from_plist(
+      xcodeproj: $project_path,
+      target: $target,
+    )
+    send_new_version("iOS最新测试包发布", "版本(#{version})\nbuild(#{build_number})")
+  end
+
+  after_all do |lane|
+  
+  end
+end

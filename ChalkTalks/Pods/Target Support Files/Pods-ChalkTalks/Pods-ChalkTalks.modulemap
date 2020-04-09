@@ -1,0 +1,6 @@
+module Pods_ChalkTalks {
+  umbrella header "Pods-ChalkTalks-umbrella.h"
+
+  export *
+  module * { export * }
+}

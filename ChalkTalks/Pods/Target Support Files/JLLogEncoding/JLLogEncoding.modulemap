@@ -1,0 +1,6 @@
+module JLLogEncoding {
+  umbrella header "JLLogEncoding-umbrella.h"
+
+  export *
+  module * { export * }
+}
