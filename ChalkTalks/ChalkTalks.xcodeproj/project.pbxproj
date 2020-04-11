@@ -3536,7 +3536,7 @@
 				CURRENT_PROJECT_VERSION = 189;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = A3T5H376XA;
+				DEVELOPMENT_TEAM = XT4M679P6B;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3663,7 +3663,7 @@
 					"-weak_framework",
 					"\"UserNotifications\"",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.fenbishuo.edu;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fenbishuo.vision;
 				PRODUCT_MODULE_NAME = ChalkTalks;
 				PRODUCT_NAME = "粉笔说";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3687,7 +3687,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 189;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = A3T5H376XA;
+				DEVELOPMENT_TEAM = XT4M679P6B;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3701,7 +3701,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 2.1.10;
-				PRODUCT_BUNDLE_IDENTIFIER = com.fenbishuo.edu;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fenbishuo.vision;
 				PRODUCT_MODULE_NAME = ChalkTalks;
 				PRODUCT_NAME = "粉笔说";
 				PROVISIONING_PROFILE_SPECIFIER = "";
